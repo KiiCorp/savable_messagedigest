@@ -37,7 +37,7 @@ static byte[] getDigestAndSuspendData(
 }
 ```
 
-### Resume intermediate digest and suspended state data.
+### Get digest from suspended data with resuming.
 
 ```java
 import java.io.DataInputStream;
