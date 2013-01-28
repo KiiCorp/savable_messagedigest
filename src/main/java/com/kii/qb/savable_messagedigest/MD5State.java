@@ -46,4 +46,8 @@ public final class MD5State
     public byte[] getStateBytes() {
         return Utils.getBytes(this.state);
     }
+
+    public int getOffset() {
+        return ((int)this.count) & 0x3F;
+    }
 }
