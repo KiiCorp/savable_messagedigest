@@ -12,8 +12,8 @@ public final class MD5State
 
     public MD5State() {
         this.state[0] = 0x67452301;
-        this.state[1] = 0xEFCDAB89;
-        this.state[2] = 0X98BADCFE;
+        this.state[1] = 0xefcdab89;
+        this.state[2] = 0X98badcfe;
         this.state[3] = 0x10325476;
     }
 
