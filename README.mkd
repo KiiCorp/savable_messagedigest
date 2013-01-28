@@ -1,1 +1,60 @@
 # Savable MessageDigest
+
+## Usage
+
+### Get digest as normal.
+
+```java
+import com.kii.qb.savable_messagedigest.MD5Digester;
+
+static byte[] getDigest(byte[] inbuf)
+{
+    MD5Digester d = new MD5Digester();
+    d.update(inbuf);
+    return d.digest();
+}
+```
+
+### Get intermediate digest and suspended state data.
+
+```java
+import java.io.DataOutputStream;
+import java.io.IOException;
+import com.kii.qb.savable_messagedigest.MD5Digester;
+
+static byte[] getDigestAndSuspendData(
+        byte[] inbuf,
+        DataOutputStream suspendDataStream)
+    throws IOException
+{
+    MD5Digester d = new MD5Digester();
+    d.update(inbuf);
+
+    // Save intermediate state to stream.
+    d.save(suspendDataStream);
+
+    return d.digest();
+}
+```
+
+### Resume intermediate digest and suspended state data.
+
+```java
+import java.io.DataInputStream;
+import java.io.IOException;
+import com.kii.qb.savable_messagedigest.MD5Digester;
+
+static byte[] getDigestAndSuspendData(
+        DataInputStream suspendedDataStream,
+        byte[] inbuf)
+    throws IOException
+{
+    MD5Digester d = new MD5Digester();
+
+    // Load intermediate state from stream.
+    d.load(suspendedDataStream);
+
+    d.update(inbuf);
+    return d.digest();
+}
+```
