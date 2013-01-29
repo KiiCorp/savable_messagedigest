@@ -92,3 +92,8 @@ static byte[] getDigestAndSuspendData(
     return d.digest();
 }
 ```
+
+## Concerns
+
+  * Not optimized memory copy: not good for large data.
+  * Not optimized function calls.
