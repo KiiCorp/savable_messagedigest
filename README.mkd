@@ -95,5 +95,5 @@ static byte[] getDigestAndSuspendData(
 
 ## Concerns
 
-  * Not optimized memory copy: not good for large data.
+  * Not optimized memory copy: not very fast for large data.
   * Not optimized function calls.
