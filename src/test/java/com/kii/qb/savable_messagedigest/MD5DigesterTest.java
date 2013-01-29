@@ -9,6 +9,7 @@ import java.util.Random;
 import java.io.DataOutputStream;
 import java.io.DataInputStream;
 import java.io.ByteArrayInputStream;
+import java.util.HashMap;
 
 public class MD5DigesterTest
 {
@@ -58,6 +59,28 @@ public class MD5DigesterTest
         MD5Digester d2 = new MD5Digester();
         d2.load(din);
         din.close();
+        d2.update(b, split, len - split);
+
+        String exp2 = digestHex(MessageDigest.getInstance("MD5"), b, len);
+        String act2 = Utils.toString(d2.digest());
+        assertEquals(exp2, act2);
+    }
+
+    public void testSplitedDigestByMap(byte[] b, int len, int split)
+        throws Exception
+    {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+
+        MD5Digester d1 = new MD5Digester();
+        d1.update(b, 0, split);
+        d1.save(map);
+
+        String exp1 = digestHex(MessageDigest.getInstance("MD5"), b, split);
+        String act1 = Utils.toString(d1.digest());
+        assertEquals(exp1, act1);
+
+        MD5Digester d2 = new MD5Digester();
+        d2.load(map);
         d2.update(b, split, len - split);
 
         String exp2 = digestHex(MessageDigest.getInstance("MD5"), b, len);
@@ -148,6 +171,61 @@ public class MD5DigesterTest
         assertDigest(data, 65, 63);
         assertDigest(data, 65, 64);
         assertDigest(data, 65, 65);
+    }
+
+    @Test
+    public void zeroRunSplitByMap() throws Exception
+    {
+        ByteArrayOutputStream bout = new ByteArrayOutputStream(256);
+        for (int i = 0; i < 256; ++i) {
+            bout.write(0);
+        }
+        byte[] data = bout.toByteArray();
+
+        testSplitedDigestByMap(data, 32, 0);
+        testSplitedDigestByMap(data, 32, 1);
+        testSplitedDigestByMap(data, 32, 16);
+        testSplitedDigestByMap(data, 32, 31);
+        testSplitedDigestByMap(data, 32, 32);
+
+        testSplitedDigestByMap(data, 55, 52);
+        testSplitedDigestByMap(data, 55, 53);
+        testSplitedDigestByMap(data, 55, 54);
+        testSplitedDigestByMap(data, 55, 55);
+
+        testSplitedDigestByMap(data, 56, 52);
+        testSplitedDigestByMap(data, 56, 53);
+        testSplitedDigestByMap(data, 56, 54);
+        testSplitedDigestByMap(data, 56, 55);
+        testSplitedDigestByMap(data, 56, 56);
+
+        testSplitedDigestByMap(data, 57, 52);
+        testSplitedDigestByMap(data, 57, 53);
+        testSplitedDigestByMap(data, 57, 54);
+        testSplitedDigestByMap(data, 57, 55);
+        testSplitedDigestByMap(data, 57, 56);
+        testSplitedDigestByMap(data, 57, 57);
+
+        testSplitedDigestByMap(data, 63, 55);
+        testSplitedDigestByMap(data, 63, 56);
+        testSplitedDigestByMap(data, 63, 57);
+        testSplitedDigestByMap(data, 63, 62);
+        testSplitedDigestByMap(data, 63, 63);
+
+        testSplitedDigestByMap(data, 64, 55);
+        testSplitedDigestByMap(data, 64, 56);
+        testSplitedDigestByMap(data, 64, 57);
+        testSplitedDigestByMap(data, 64, 62);
+        testSplitedDigestByMap(data, 64, 63);
+        testSplitedDigestByMap(data, 64, 64);
+
+        testSplitedDigestByMap(data, 65, 55);
+        testSplitedDigestByMap(data, 65, 56);
+        testSplitedDigestByMap(data, 65, 57);
+        testSplitedDigestByMap(data, 65, 62);
+        testSplitedDigestByMap(data, 65, 63);
+        testSplitedDigestByMap(data, 65, 64);
+        testSplitedDigestByMap(data, 65, 65);
     }
 
     @Test

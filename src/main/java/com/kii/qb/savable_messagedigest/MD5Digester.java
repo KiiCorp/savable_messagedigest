@@ -1,9 +1,10 @@
 package com.kii.qb.savable_messagedigest;
 
-import java.security.MessageDigest;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.DataInputStream;
+import java.security.MessageDigest;
+import java.util.Map;
 
 public final class MD5Digester extends MessageDigest
 {
@@ -62,6 +63,14 @@ public final class MD5Digester extends MessageDigest
     public void load(DataInputStream input) throws IOException
     {
         this.state.load(input);
+    }
+
+    public void save(Map<String, Object> outmap) {
+        this.state.save(outmap);
+    }
+
+    public void load(Map<String, Object> inmap) throws RuntimeException {
+        this.state.load(inmap);
     }
 
     public static MD5State getFinalState(MD5State state)
