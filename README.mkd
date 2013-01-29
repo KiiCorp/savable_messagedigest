@@ -58,3 +58,37 @@ static byte[] getDigestAndSuspendData(
     return d.digest();
 }
 ```
+
+### Use a map to store intermediate state.
+
+```java
+import java.util.Map;
+import com.kii.qb.savable_messagedigest.MD5Digester;
+
+static byte[] getDigestAndSuspendData(
+        byte[] inbuf,
+        Map<String, Object> suspendDataMap)
+{
+    MD5Digester d = new MD5Digester();
+    d.update(inbuf);
+
+    // Save intermediate state to a map.
+    d.save(suspendDataMap);
+
+    return d.digest();
+}
+
+static byte[] getDigestAndSuspendData(
+        Map<String, Object> suspendDataMap,
+        byte[] inbuf)
+    throws RuntimeException
+{
+    MD5Digester d = new MD5Digester();
+
+    // Load intermediate state from a map.
+    d.load(suspendDataMap);
+
+    d.update(inbuf);
+    return d.digest();
+}
+```
